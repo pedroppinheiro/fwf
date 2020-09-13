@@ -47,12 +47,12 @@ All we have to to now is feed these files to our fwf command line with the follo
 The fwf tool will generate an index.html file which highlights fields. If you hover your mouse over the fields a tooltip will show up with the name of the fields.
 
 ## Building
-A good command to certify that everything is working is the following:
+A good command to certify that everything is working and building is the following:
 
 ```
-go test ./... && go build && ./fwf -yaml="test_assets/test.yaml" -file="test_assets/test.txt" && cat index.html
+go get -v -t -d ./... && go test ./... && go build && ./fwf -yaml="test_assets/test.yaml" -file="test_assets/test.txt" && cat index.html
 ```
 or
 ```
-go test ./... && go build && ./fwf -yaml="test_assets/test.yaml" -file="test_assets/test.txt" -o="./test_assets/" && cat ./test_assets/index.html
+go get -v -t -d ./... && go test ./... && go build && ./fwf -yaml="test_assets/test.yaml" -file="test_assets/test.txt" -o="./test_assets/" && cat ./test_assets/index.html
 ```
