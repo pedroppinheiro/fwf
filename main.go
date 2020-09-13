@@ -59,7 +59,7 @@ func main() {
 	generatedFilePath, err := exporter.SaveToFile(finalExportedContent, fileExportedLocation)
 
 	if err == nil {
-		log.Printf("File created succesfully on %v\n", generatedFilePath)
+		log.Printf("File created successfully on %v\n", generatedFilePath)
 	} else {
 		panic(err)
 	}

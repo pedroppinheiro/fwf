@@ -72,7 +72,7 @@ var (
 )
 
 // HTMLExporter is an implementation of the Exporter interface,
-// in which is reponsible to mark and export a string to its html visualization
+// in which is responsible to mark and export a string to its html visualization
 type HTMLExporter struct {
 	htmlTemplate    string
 	htmlMarker      configuration.Marker

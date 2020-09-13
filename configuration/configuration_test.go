@@ -30,32 +30,32 @@ func Test_ReadConfiguration(t *testing.T) {
               end: 8`
 	var expectedConfiguration1 Configuration = Configuration{
 		Records: []Record{
-			Record{
+			{
 				Name:  "record A",
 				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 1",
 						Initial: 1,
 						End:     2,
 					},
-					Field{
+					{
 						Name:    "field 2",
 						Initial: 3,
 						End:     4,
 					},
 				},
 			},
-			Record{
+			{
 				Name:  "record B",
 				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 3",
 						Initial: 5,
 						End:     6,
 					},
-					Field{
+					{
 						Name:    "field 4",
 						Initial: 7,
 						End:     8,
@@ -74,13 +74,13 @@ func Test_ReadConfiguration(t *testing.T) {
             - name: "field 2"`
 	var expectedConfiguration2 Configuration = Configuration{
 		Records: []Record{
-			Record{
+			{
 				Name: "record A",
 				Fields: []Field{
-					Field{
+					{
 						Name: "field 1",
 					},
-					Field{
+					{
 						Name: "field 2",
 					},
 				},
@@ -168,32 +168,32 @@ func Test_ReadConfiguration(t *testing.T) {
 func TestConfiguration_isValid(t *testing.T) {
 	var validConfiguration Configuration = Configuration{
 		Records: []Record{
-			Record{
+			{
 				Name:  "record A",
 				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 1",
 						Initial: 1,
 						End:     2,
 					},
-					Field{
+					{
 						Name:    "field 2",
 						Initial: 3,
 						End:     4,
 					},
 				},
 			},
-			Record{
+			{
 				Name:  "record B",
 				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 3",
 						Initial: 5,
 						End:     6,
 					},
-					Field{
+					{
 						Name:    "field 4",
 						Initial: 7,
 						End:     8,
@@ -205,32 +205,32 @@ func TestConfiguration_isValid(t *testing.T) {
 
 	var configurationWithInvalidField Configuration = Configuration{
 		Records: []Record{
-			Record{
+			{
 				Name:  "record A",
 				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 1",
 						Initial: 1,
 						End:     2,
 					},
-					Field{
+					{
 						Name:    "field 2",
 						Initial: 3,
 						End:     4,
 					},
 				},
 			},
-			Record{
+			{
 				Name:  "record B",
 				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 3",
 						Initial: 5,
 						End:     6,
 					},
-					Field{
+					{
 						Name:    "field 4",
 						Initial: 0,
 						End:     0,
@@ -242,32 +242,32 @@ func TestConfiguration_isValid(t *testing.T) {
 
 	var configurationWithConflictOnFields Configuration = Configuration{
 		Records: []Record{
-			Record{
+			{
 				Name:  "record A",
 				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 1",
 						Initial: 1,
 						End:     2,
 					},
-					Field{
+					{
 						Name:    "field 2",
 						Initial: 3,
 						End:     4,
 					},
 				},
 			},
-			Record{
+			{
 				Name:  "record B",
 				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
 				Fields: []Field{
-					Field{
+					{
 						Name:    "field 3",
 						Initial: 5,
 						End:     6,
 					},
-					Field{
+					{
 						Name:    "field 4",
 						Initial: 6,
 						End:     7,

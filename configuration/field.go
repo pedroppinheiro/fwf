@@ -126,7 +126,7 @@ func getStringAfterField(s string, field Field) string {
 		return ""
 	}
 
-	return s[field.End:len(s)]
+	return s[field.End:]
 }
 
 // ApplyMarkerToFieldsOnString returns a string that is the result of applying a marker to the fields on a string

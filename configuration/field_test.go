@@ -88,34 +88,34 @@ func Test_sortFieldsByInitialPositionAsc(t *testing.T) {
 		{
 			name: "Slice with one Field should remain the same",
 			args: args{[]Field{
-				Field{"", 5, 5},
+				{"", 5, 5},
 			}},
-			want: []Field{Field{"", 5, 5}},
+			want: []Field{{"", 5, 5}},
 		},
 		{
 			name: "Slice sorted by Initial desc should be sorted by Initial asc",
 			args: args{[]Field{
-				Field{"", 5, 5},
-				Field{"", 1, 1},
+				{"", 5, 5},
+				{"", 1, 1},
 			}},
-			want: []Field{Field{"", 1, 1}, Field{"", 5, 5}},
+			want: []Field{{"", 1, 1}, {"", 5, 5}},
 		},
 		{
 			name: "Slice sorted by Initial asc should remain the same",
 			args: args{[]Field{
-				Field{"", 1, 1},
-				Field{"", 5, 5},
+				{"", 1, 1},
+				{"", 5, 5},
 			}},
-			want: []Field{Field{"", 1, 1}, Field{"", 5, 5}},
+			want: []Field{{"", 1, 1}, {"", 5, 5}},
 		},
 		{
 			name: "Unsorted slice should be sorted",
 			args: args{[]Field{
-				Field{"", 5, 5},
-				Field{"", 1, 1},
-				Field{"", 10, 10},
+				{"", 5, 5},
+				{"", 1, 1},
+				{"", 10, 10},
 			}},
-			want: []Field{Field{"", 1, 1}, Field{"", 5, 5}, Field{"", 10, 10}},
+			want: []Field{{"", 1, 1}, {"", 5, 5}, {"", 10, 10}},
 		},
 	}
 	for _, tt := range tests {
@@ -190,17 +190,17 @@ func Test_existsConflict(t *testing.T) {
 
 func Test_existsConflictOnFields(t *testing.T) {
 	var fieldsWithConflicts = []Field{
-		Field{"", 1, 1},
-		Field{"", 2, 3},
-		Field{"", 4, 5},
-		Field{"", 5, 6},
+		{"", 1, 1},
+		{"", 2, 3},
+		{"", 4, 5},
+		{"", 5, 6},
 	}
 
 	var unsortedfieldsWithConflicts = []Field{
-		Field{"", 4, 5},
-		Field{"", 2, 3},
-		Field{"", 5, 6},
-		Field{"", 1, 1},
+		{"", 4, 5},
+		{"", 2, 3},
+		{"", 5, 6},
+		{"", 1, 1},
 	}
 
 	type args struct {
@@ -477,8 +477,8 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 			args: args{
 				marker: marker,
 				fields: []Field{
-					Field{"", 4, 8},
-					Field{"", 17, 21},
+					{"", 4, 8},
+					{"", 17, 21},
 				},
 				s: "thequickbrownfoxjumpsoverthelazydog",
 			},
@@ -489,10 +489,10 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 			args: args{
 				marker: marker,
 				fields: []Field{
-					Field{"", 9, 13},
-					Field{"", 4, 8},
-					Field{"", 17, 21},
-					Field{"", 14, 16},
+					{"", 9, 13},
+					{"", 4, 8},
+					{"", 17, 21},
+					{"", 14, 16},
 				},
 				s: "thequickbrownfoxjumpsoverthelazydog",
 			},
@@ -503,7 +503,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 			args: args{
 				marker: marker,
 				fields: []Field{
-					Field{"", 1, 35},
+					{"", 1, 35},
 				},
 				s: "thequickbrownfoxjumpsoverthelazydog",
 			},
@@ -514,8 +514,8 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 			args: args{
 				marker: marker,
 				fields: []Field{
-					Field{"", 1, 1},
-					Field{"", 35, 35},
+					{"", 1, 1},
+					{"", 35, 35},
 				},
 				s: "thequickbrownfoxjumpsoverthelazydog",
 			},
@@ -526,7 +526,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 			args: args{
 				marker: marker,
 				fields: []Field{
-					Field{"", 34, 100},
+					{"", 34, 100},
 				},
 				s: "thequickbrownfoxjumpsoverthelazydog",
 			},

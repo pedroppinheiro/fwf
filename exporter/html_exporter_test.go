@@ -33,7 +33,7 @@ func TestHTMLExporter_MarkFieldsOnString(t *testing.T) {
 			"Should mark fields correctly",
 			exporter,
 			args{
-				[]configuration.Field{configuration.Field{Name: "", Initial: 7, End: 11}},
+				[]configuration.Field{{Name: "", Initial: 7, End: 11}},
 				"hello world",
 			},
 			"hello <!--world-->",
