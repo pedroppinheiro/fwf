@@ -15,8 +15,13 @@ type Field struct {
 
 // Marker holds the initial and end marker that are placed before and after a field on a string
 type Marker struct {
-	InitialMarker string
-	EndMarker     string
+	//ObtainInitialMarker returns a string corresponding to the initial marker.
+	// A given field may be used to get more information
+	ObtainInitialMarker func(field Field) string
+
+	//ObtainEndMarker returns a string corresponding to the end marker.
+	// A given field may be used to get more information
+	ObtainEndMarker func(field Field) string
 }
 
 // isValid returns true if the field is valid, false otherwise. A valid field is one where
@@ -138,9 +143,9 @@ func ApplyMarkerToFieldsOnString(marker Marker, fields []Field, s string) string
 
 	for i, field := range fields {
 		tempString = getStringBeforeField(s, field)
-		tempString += marker.InitialMarker
+		tempString += marker.ObtainInitialMarker(field)
 		tempString += getStringOfField(s, field)
-		tempString += marker.EndMarker
+		tempString += marker.ObtainEndMarker(field)
 
 		if i != 0 {
 			lastFieldEndPosition = fields[i-1].End

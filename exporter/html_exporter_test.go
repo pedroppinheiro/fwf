@@ -7,10 +7,14 @@ import (
 )
 
 var exporter = HTMLExporter{
-	htmlTemplate: "<template>%v</template>",
+	htmlTemplate: "<template>{{.}}</template>",
 	htmlMarker: configuration.Marker{
-		InitialMarker: "<!--",
-		EndMarker:     "-->",
+		ObtainInitialMarker: func(field configuration.Field) string {
+			return "<!--"
+		},
+		ObtainEndMarker: func(field configuration.Field) string {
+			return "-->"
+		},
 	},
 }
 
