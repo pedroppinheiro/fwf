@@ -6,121 +6,105 @@ import (
 	"testing"
 )
 
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-//Test 1 - full yaml configuration
-var yamlString1 string = `
-records:
- - name: "record A"
-   regex: "^A.*$"
-   fields:
-    - name: "field 1"
-      initial: 1
-      end: 2
-    - name: "field 2"
-      initial: 3
-      end: 4
- - name: "record B"
-   regex: "^B.*$"
-   fields:
-    - name: "field 3"
-      initial: 5
-      end: 6
-    - name: "field 4"
-      initial: 7
-      end: 8
-`
-var expectedConfiguration1 Configuration = Configuration{
-	Records: []Records{
-		Records{
-			Name: "record A",
-			//Regex: Regex("^A.*$"),
-			Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
-			Fields: []Fields{
-				Fields{
-					Name:    "field 1",
-					Initial: 1,
-					End:     2,
-				},
-				Fields{
-					Name:    "field 2",
-					Initial: 3,
-					End:     4,
-				},
-			},
-		},
-		Records{
-			Name: "record B",
-			//Regex: Regex("^B.*$"),
-			Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
-			Fields: []Fields{
-				Fields{
-					Name:    "field 3",
-					Initial: 5,
-					End:     6,
-				},
-				Fields{
-					Name:    "field 4",
-					Initial: 7,
-					End:     8,
-				},
-			},
-		},
-	},
-}
-
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-//Test 2 - few fields are set
-var yamlString2 string = `
-records:
- - name: "record A"
-   fields:
-    - name: "field 1"
-    - name: "field 2"
-`
-var expectedConfiguration2 Configuration = Configuration{
-	Records: []Records{
-		Records{
-			Name: "record A",
-			Fields: []Fields{
-				Fields{
-					Name: "field 1",
-				},
-				Fields{
-					Name: "field 2",
-				},
-			},
-		},
-	},
-}
-
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-//Test 3 -  fields are incorrectly named
-var yamlString3 string = `
-recordsWithChangedName:
- - nameIsChanged: "record A"
-   fieldsIsChanged:
-    - nameIsChanged: "field 1"
-    - nameIsChanged: "field 2"
-`
-
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-//Test 4 - unparsable regex
-var yamlString4 string = `
-records:
- - name: "record A"
-   regex: "\\"
-   fields:
-    - name: "field 1"
-    - name: "field 2"
-`
-
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
 func Test_ReadConfiguration(t *testing.T) {
+	//Test 1 - full yaml configuration
+	var yamlString1 string = `
+        records:
+         - name: "record A"
+           regex: "^A.*$"
+           fields:
+            - name: "field 1"
+              initial: 1
+              end: 2
+            - name: "field 2"
+              initial: 3
+              end: 4
+         - name: "record B"
+           regex: "^B.*$"
+           fields:
+            - name: "field 3"
+              initial: 5
+              end: 6
+            - name: "field 4"
+              initial: 7
+              end: 8`
+	var expectedConfiguration1 Configuration = Configuration{
+		Records: []Record{
+			Record{
+				Name:  "record A",
+				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 1",
+						Initial: 1,
+						End:     2,
+					},
+					Field{
+						Name:    "field 2",
+						Initial: 3,
+						End:     4,
+					},
+				},
+			},
+			Record{
+				Name:  "record B",
+				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 3",
+						Initial: 5,
+						End:     6,
+					},
+					Field{
+						Name:    "field 4",
+						Initial: 7,
+						End:     8,
+					},
+				},
+			},
+		},
+	}
+
+	//Test 2 - few fields are set
+	var yamlString2 string = `
+        records:
+         - name: "record A"
+           fields:
+            - name: "field 1"
+            - name: "field 2"`
+	var expectedConfiguration2 Configuration = Configuration{
+		Records: []Record{
+			Record{
+				Name: "record A",
+				Fields: []Field{
+					Field{
+						Name: "field 1",
+					},
+					Field{
+						Name: "field 2",
+					},
+				},
+			},
+		},
+	}
+
+	//Test 3 -  fields are incorrectly named
+	var yamlString3 string = `
+        recordsWithChangedName:
+         - nameIsChanged: "record A"
+           fieldsIsChanged:
+            - nameIsChanged: "field 1"
+			- nameIsChanged: "field 2"`
+
+	//Test 4 - unparsable regex
+	var yamlString4 string = `
+        records:
+         - name: "record A"
+           regex: "\\"
+           fields:
+            - name: "field 1"
+            - name: "field 2"`
+
 	type args struct {
 		yamlConfiguration []byte
 	}
@@ -181,33 +165,143 @@ func Test_ReadConfiguration(t *testing.T) {
 	}
 }
 
-func TestRecords_MatchString(t *testing.T) {
-	type args struct {
-		s string
+func TestConfiguration_isValid(t *testing.T) {
+	var validConfiguration Configuration = Configuration{
+		Records: []Record{
+			Record{
+				Name:  "record A",
+				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 1",
+						Initial: 1,
+						End:     2,
+					},
+					Field{
+						Name:    "field 2",
+						Initial: 3,
+						End:     4,
+					},
+				},
+			},
+			Record{
+				Name:  "record B",
+				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 3",
+						Initial: 5,
+						End:     6,
+					},
+					Field{
+						Name:    "field 4",
+						Initial: 7,
+						End:     8,
+					},
+				},
+			},
+		},
 	}
+
+	var configurationWithInvalidField Configuration = Configuration{
+		Records: []Record{
+			Record{
+				Name:  "record A",
+				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 1",
+						Initial: 1,
+						End:     2,
+					},
+					Field{
+						Name:    "field 2",
+						Initial: 3,
+						End:     4,
+					},
+				},
+			},
+			Record{
+				Name:  "record B",
+				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 3",
+						Initial: 5,
+						End:     6,
+					},
+					Field{
+						Name:    "field 4",
+						Initial: 0,
+						End:     0,
+					},
+				},
+			},
+		},
+	}
+
+	var configurationWithConflictOnFields Configuration = Configuration{
+		Records: []Record{
+			Record{
+				Name:  "record A",
+				Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 1",
+						Initial: 1,
+						End:     2,
+					},
+					Field{
+						Name:    "field 2",
+						Initial: 3,
+						End:     4,
+					},
+				},
+			},
+			Record{
+				Name:  "record B",
+				Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
+				Fields: []Field{
+					Field{
+						Name:    "field 3",
+						Initial: 5,
+						End:     6,
+					},
+					Field{
+						Name:    "field 4",
+						Initial: 6,
+						End:     7,
+					},
+				},
+			},
+		},
+	}
+
 	tests := []struct {
-		name    string
-		records Records
-		args    args
-		want    bool
+		name          string
+		configuration Configuration
+		want          bool
 	}{
 		{
-			"correctly matches a string",
-			Records{Regex: Regex{regex: regexp.MustCompile("test")}},
-			args{s: "test"},
-			true,
+			name:          "Should be a valid configuration",
+			configuration: validConfiguration,
+			want:          true,
 		},
 		{
-			"string is not matched",
-			Records{Regex: Regex{regex: regexp.MustCompile("test")}},
-			args{s: "findme"},
-			false,
+			name:          "Should be an invalid configuration due to invalid field",
+			configuration: configurationWithInvalidField,
+			want:          false,
+		},
+		{
+			name:          "Should be an invalid configuration due to conflicts on fields",
+			configuration: configurationWithConflictOnFields,
+			want:          false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.records.MatchString(tt.args.s); got != tt.want {
-				t.Errorf("Records.MatchString() = %v, want %v", got, tt.want)
+			if got := tt.configuration.isValid(); got != tt.want {
+				t.Errorf("Configuration.isValid() = %v, want %v", got, tt.want)
 			}
 		})
 	}

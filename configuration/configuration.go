@@ -1,61 +1,28 @@
 package configuration
 
 import (
-	"regexp"
-
 	"gopkg.in/yaml.v2"
 )
 
-// Configuration holds the data of the yaml configuration
+// Configuration is the representation of the records described on a YAML file
 type Configuration struct {
-	Records []Records
+	Records []Record
 }
 
-// Records holds the data of the Records
-type Records struct {
-	Name   string
-	Regex  Regex
-	Fields []Fields
-}
-
-// MatchString reports whether the string s contains any match of the regular expression pattern.
-func (records Records) MatchString(s string) bool {
-	return records.Regex.regex.MatchString(s)
-}
-
-// Regex stores regex
-type Regex struct {
-	regexString string
-	regex       *regexp.Regexp
-}
-
-// UnmarshalYAML interface is implemented to give a custom behaviour when marshalling the yaml to the "Regex" field.
-// See https://godoc.org/gopkg.in/yaml.v2#Unmarshaler for more details
-func (r *Regex) UnmarshalYAML(unmarshal func(interface{}) error) error {
-	var s string
-	if err := unmarshal(&s); err != nil {
-		return err
+// isValid returns true if the given configuration is valid, and else otherwise.
+// A valid configuration is a configuration in which all fields, of each record, are valid and
+// there is no conflict between them.
+func (configuration Configuration) isValid() bool {
+	for _, record := range configuration.Records {
+		existsConflict, err := existsConflictOnFields(record.Fields)
+		if err != nil || existsConflict {
+			return false
+		}
 	}
-
-	reg, err := regexp.Compile(s)
-	if err != nil {
-		r = &Regex{}
-		return err
-	}
-
-	r.regexString = s
-	r.regex = reg
-	return nil
+	return true
 }
 
-// Fields holds the data of the Fields
-type Fields struct {
-	Name    string
-	Initial int
-	End     int
-}
-
-// ReadConfiguration reads a YAML and returns the equivalent Configuration struct
+// ReadConfiguration reads a YAML content and returns the equivalent Configuration struct
 func ReadConfiguration(yamlConfiguration []byte) (Configuration, error) {
 	configuration := Configuration{}
 	err := yaml.UnmarshalStrict(yamlConfiguration, &configuration)
