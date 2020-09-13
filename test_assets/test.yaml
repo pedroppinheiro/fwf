@@ -1,0 +1,10 @@
+records:
+  - name: record A
+    regex: (?m)^A.*$
+    fields:
+      - name: field 1
+        initial: 1
+        end: 1
+      - name: field 2
+        initial: 2
+        end: 2

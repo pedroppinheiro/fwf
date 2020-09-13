@@ -11,5 +11,5 @@ type Exporter interface {
 	ExportVisualization(string) string
 
 	// SaveToFile saves a given string to a given path
-	SaveToFile(s string, path string)
+	SaveToFile(s string, path string) (generatedFilePath string, err error)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"io"
 	"io/ioutil"
 	"log"
@@ -11,19 +12,33 @@ import (
 	"./exporter"
 )
 
+var (
+	yamlLocation         string
+	fileLocation         string
+	fileExportedLocation string
+)
+
+func init() {
+	flag.StringVar(&yamlLocation, "yaml", "", "the full path for the yaml configuration")
+	flag.StringVar(&fileLocation, "file", "", "the full path for the file to generate the visualization")
+	flag.StringVar(&fileExportedLocation, "o", "./", "the path to where the exported file should be created")
+	flag.Parse()
+}
+
 func main() {
-	var (
-		yamlLocation         = "./test_yaml.yaml"
-		fileLocation         = "./test_conteudo.txt"
-		exporter             = getCurrentExporter()
-		fileExportedLocation = "./"
-	)
+	if yamlLocation == "" {
+		panic("Please provide a valid yaml location with the flag \"-yaml\", use \"fwf -h\" or \"fwf --help\" for help")
+	}
+	if fileLocation == "" {
+		panic("Please provide a valid file location location with the flag \"-file\", use \"fwf -h\" or \"fwf --help\" for help")
+	}
 
 	configuration := readConfigurationFromYAML(yamlLocation)
 	file := getFile(fileLocation)
 	defer file.Close()
 	reader := bufio.NewReader(file)
 
+	exporter := getCurrentExporter()
 	exportedContent := ""
 	for {
 		line, err := reader.ReadString('\n')
@@ -41,7 +56,13 @@ func main() {
 		}
 	}
 	finalExportedContent := exporter.ExportVisualization(exportedContent)
-	exporter.SaveToFile(finalExportedContent, fileExportedLocation)
+	generatedFilePath, err := exporter.SaveToFile(finalExportedContent, fileExportedLocation)
+
+	if err == nil {
+		log.Printf("File created succesfully on %v\n", generatedFilePath)
+	} else {
+		panic(err)
+	}
 }
 
 func readConfigurationFromYAML(yamlLocation string) configuration.Configuration {
@@ -71,8 +92,4 @@ func getFile(fileLocation string) *os.File {
 
 func getCurrentExporter() exporter.Exporter {
 	return exporter.GetHTMLExporter()
-}
-
-func saveToFile(s string, path string) {
-
 }

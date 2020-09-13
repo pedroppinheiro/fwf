@@ -46,10 +46,8 @@ func (exporter HTMLExporter) ExportVisualization(s string) string {
 }
 
 // SaveToFile saves a given string to a given path
-func (exporter HTMLExporter) SaveToFile(s string, path string) {
-
-	err := ioutil.WriteFile(path+exporter.defaultFileName, []byte(s), 0777)
-	if err != nil {
-		panic(err)
-	}
+func (exporter HTMLExporter) SaveToFile(s string, path string) (generatedFilePath string, err error) {
+	generatedFilePath = path + exporter.defaultFileName
+	err = ioutil.WriteFile(generatedFilePath, []byte(s), 0777)
+	return
 }
