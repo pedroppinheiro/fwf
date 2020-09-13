@@ -1,5 +1,7 @@
 # fwf
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/pedroppinheiro/fwf)](https://goreportcard.com/report/github.com/pedroppinheiro/fwf)
+
 fwf is a little command line tool to make it easier to work with fixed-width files. It helps you visualize the fields on each line by generating an html which highlights and adds tooltips for each field. The records and fields of a fixed-width file must be given to fwf in a yaml file
 
 ## Usage
