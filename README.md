@@ -3,7 +3,7 @@
 fwf is a little command line tool to make it easier to work with fixed-width files. It helps you visualize the fields on each line by generating an html which highlights and adds tooltips for each field. The records and fields of a fixed-width file must be given to fwf in a yaml file
 
 ## Usage
-
+```
 Usage fwf:
   -file string
         the full path for the file to generate the visualization
@@ -11,8 +11,10 @@ Usage fwf:
         the full path for the yaml configuration
   -o string
         the path to where the exported file should be created (default "./")
+```
 
 Let's use the following fixed-width file "people.txt" as an example:
+
 ```
 John Smith         40
 Homer Simpson      30
