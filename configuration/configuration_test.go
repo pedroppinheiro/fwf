@@ -72,21 +72,6 @@ func Test_ReadConfiguration(t *testing.T) {
            fields:
             - name: "field 1"
             - name: "field 2"`
-	var expectedConfiguration2 Configuration = Configuration{
-		Records: []Record{
-			{
-				Name: "record A",
-				Fields: []Field{
-					{
-						Name: "field 1",
-					},
-					{
-						Name: "field 2",
-					},
-				},
-			},
-		},
-	}
 
 	//Test 3 -  fields are incorrectly named
 	var yamlString3 string = `
@@ -123,8 +108,8 @@ func Test_ReadConfiguration(t *testing.T) {
 		{
 			"construct yaml with only some of the configuration's fields",
 			args{yamlConfiguration: []byte(yamlString2)},
-			expectedConfiguration2,
-			false,
+			Configuration{},
+			true,
 		},
 		{
 			"get error when trying to construct unproper yaml",
@@ -281,27 +266,31 @@ func TestConfiguration_isValid(t *testing.T) {
 		name          string
 		configuration Configuration
 		want          bool
+		wantErr       bool
 	}{
 		{
 			name:          "Should be a valid configuration",
 			configuration: validConfiguration,
 			want:          true,
+			wantErr:       false,
 		},
 		{
 			name:          "Should be an invalid configuration due to invalid field",
 			configuration: configurationWithInvalidField,
 			want:          false,
+			wantErr:       true,
 		},
 		{
 			name:          "Should be an invalid configuration due to conflicts on fields",
 			configuration: configurationWithConflictOnFields,
 			want:          false,
+			wantErr:       false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.configuration.isValid(); got != tt.want {
-				t.Errorf("Configuration.isValid() = %v, want %v", got, tt.want)
+			if got, err := tt.configuration.isValid(); got != tt.want || ((err != nil) != tt.wantErr) {
+				t.Errorf("Configuration.isValid() = %v, want %v; err = %v, wantedError = %v", got, tt.want, err, tt.wantErr)
 			}
 		})
 	}

@@ -40,6 +40,21 @@ func sortFieldsByInitialPositionAsc(fields []Field) {
 	})
 }
 
+// existsConflict returns true if there is a conflict between fields of a given slice of Field, false otherwise
+func existsConflictOnFields(fields []Field) (bool, error) {
+	sortFieldsByInitialPositionAsc(fields)
+	for i := 0; i < len(fields); i++ {
+
+		if i != 0 {
+			existsConflict, err := existsConflict(fields[i-1], fields[i])
+			if err != nil || existsConflict {
+				return existsConflict, err
+			}
+		}
+	}
+	return false, nil
+}
+
 // existsConflict returns true if there is a conflict between two given fields. A conflict is when
 // an initial and end position exists in the same range of the positions of another field
 func existsConflict(field1 Field, field2 Field) (bool, error) {
@@ -55,21 +70,6 @@ func existsConflict(field1 Field, field2 Field) (bool, error) {
 	isField1EndOutOfField2Range := field1.End < field2.Initial && field1.End < field2.End
 
 	return !isField1InitialOutOfField2Range || !isField1EndOutOfField2Range, nil
-}
-
-// existsConflict returns true if there is a conflict between fields of a given slice of Field, false otherwise
-func existsConflictOnFields(fields []Field) (bool, error) {
-	sortFieldsByInitialPositionAsc(fields)
-	for i := 0; i < len(fields); i++ {
-
-		if i != 0 {
-			existsConflict, err := existsConflict(fields[i-1], fields[i])
-			if err != nil || existsConflict {
-				return existsConflict, err
-			}
-		}
-	}
-	return false, nil
 }
 
 // getStringBeforeField returns the string that exists before a given field.
