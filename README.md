@@ -1,5 +1,6 @@
 # fwf
 
+![CircleCI](https://img.shields.io/circleci/build/github/pedroppinheiro/fwf)
 [![Go Report Card](https://goreportcard.com/badge/github.com/pedroppinheiro/fwf)](https://goreportcard.com/report/github.com/pedroppinheiro/fwf)
 [![GoDoc](https://godoc.org/github.com/pedroppinheiro/fwf?status.svg)](https://godoc.org/github.com/pedroppinheiro/fwf)
 
