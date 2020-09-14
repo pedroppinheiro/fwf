@@ -8,8 +8,8 @@ import (
 	"log"
 	"os"
 
-	"./configuration"
-	"./exporter"
+	"github.com/pedroppinheiro/fwf/configuration"
+	"github.com/pedroppinheiro/fwf/exporter"
 )
 
 var (

@@ -1,6 +1,6 @@
 package exporter
 
-import "../configuration"
+import "github.com/pedroppinheiro/fwf/configuration"
 
 //Exporter defines the interface for all exporters
 type Exporter interface {

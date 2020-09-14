@@ -3,7 +3,7 @@ package exporter
 import (
 	"testing"
 
-	"../configuration"
+	"github.com/pedroppinheiro/fwf/configuration"
 )
 
 var exporter = HTMLExporter{

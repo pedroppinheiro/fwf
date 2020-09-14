@@ -7,7 +7,7 @@ import (
 	"log"
 	"text/template"
 
-	"../configuration"
+	"github.com/pedroppinheiro/fwf/configuration"
 )
 
 var (
