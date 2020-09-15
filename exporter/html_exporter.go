@@ -84,9 +84,9 @@ func GetHTMLExporter() Exporter {
 	return HTMLExporter{htmlTemplate, htmlMarker, "index.html"}
 }
 
-// MarkFieldsOnString will mark all the fields on a given string using a custom html marker
-func (exporter HTMLExporter) MarkFieldsOnString(fields []yamlconfig.Field, s string) string {
-	return yamlconfig.ApplyMarkerToFieldsOnString(exporter.htmlMarker, fields, s)
+// GetFieldMarker return html field marker
+func (exporter HTMLExporter) GetFieldMarker() yamlconfig.Marker {
+	return exporter.htmlMarker
 }
 
 // ExportVisualization will take a given string and will use it on a HTML template to make it better to visualize the end result on a browser

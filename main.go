@@ -45,7 +45,7 @@ func main() {
 
 		for _, record := range configuration.Records {
 			if record.IsMatch(line) {
-				exportedContent += exporter.MarkFieldsOnString(record.Fields, line)
+				exportedContent += yamlconfig.ApplyMarkerToFieldsOnString(exporter.GetFieldMarker(), record.Fields, line)
 			} else {
 				exportedContent += line
 			}

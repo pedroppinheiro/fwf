@@ -1,14 +1,15 @@
 package exporter
 
-import "github.com/pedroppinheiro/fwf/yamlconfig"
+import (
+	"github.com/pedroppinheiro/fwf/yamlconfig"
+)
 
 //Exporter defines the interface for all exporters
 type Exporter interface {
-	// MarkFieldsOnString will mark all the fields on a given string
-	MarkFieldsOnString([]yamlconfig.Field, string) string
-
 	// ExportVisualization will take a given string and may add specific content to aid in the visualizing of the end result
 	ExportVisualization(string) string
+
+	GetFieldMarker() yamlconfig.Marker
 
 	// SaveToFile saves a given string to a given path
 	SaveToFile(s string, path string) (generatedFilePath string, err error)
