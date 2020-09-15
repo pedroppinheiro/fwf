@@ -3,16 +3,16 @@ package exporter
 import (
 	"testing"
 
-	"github.com/pedroppinheiro/fwf/configuration"
+	"github.com/pedroppinheiro/fwf/yamlconfig"
 )
 
 var exporter = HTMLExporter{
 	htmlTemplate: "<template>{{.}}</template>",
-	htmlMarker: configuration.Marker{
-		ObtainInitialMarker: func(field configuration.Field) string {
+	htmlMarker: yamlconfig.Marker{
+		ObtainInitialMarker: func(field yamlconfig.Field) string {
 			return "<!--"
 		},
-		ObtainEndMarker: func(field configuration.Field) string {
+		ObtainEndMarker: func(field yamlconfig.Field) string {
 			return "-->"
 		},
 	},
@@ -20,7 +20,7 @@ var exporter = HTMLExporter{
 
 func TestHTMLExporter_MarkFieldsOnString(t *testing.T) {
 	type args struct {
-		fields []configuration.Field
+		fields []yamlconfig.Field
 		s      string
 	}
 	tests := []struct {
@@ -33,7 +33,7 @@ func TestHTMLExporter_MarkFieldsOnString(t *testing.T) {
 			"Should mark fields correctly",
 			exporter,
 			args{
-				[]configuration.Field{{Name: "", Initial: 7, End: 11}},
+				[]yamlconfig.Field{{Name: "", Initial: 7, End: 11}},
 				"hello world",
 			},
 			"hello <!--world-->",

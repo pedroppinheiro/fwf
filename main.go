@@ -8,8 +8,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/pedroppinheiro/fwf/configuration"
 	"github.com/pedroppinheiro/fwf/exporter"
+	"github.com/pedroppinheiro/fwf/yamlconfig"
 )
 
 var (
@@ -65,9 +65,9 @@ func main() {
 	}
 }
 
-func readConfigurationFromYAML(yamlLocation string) configuration.Configuration {
+func readConfigurationFromYAML(yamlLocation string) yamlconfig.Configuration {
 	yamlContent := readFileContent(yamlLocation)
-	configuration, err := configuration.ReadConfiguration(yamlContent)
+	configuration, err := yamlconfig.ReadConfiguration(yamlContent)
 	if err != nil {
 		panic(err)
 	}

@@ -7,7 +7,7 @@ import (
 	"log"
 	"text/template"
 
-	"github.com/pedroppinheiro/fwf/configuration"
+	"github.com/pedroppinheiro/fwf/yamlconfig"
 )
 
 var (
@@ -61,11 +61,11 @@ var (
 			</body>
 		</html>`
 
-	htmlMarker = configuration.Marker{
-		ObtainInitialMarker: func(field configuration.Field) string {
+	htmlMarker = yamlconfig.Marker{
+		ObtainInitialMarker: func(field yamlconfig.Field) string {
 			return "<div class='tooltip'>"
 		},
-		ObtainEndMarker: func(field configuration.Field) string {
+		ObtainEndMarker: func(field yamlconfig.Field) string {
 			return fmt.Sprintf("<span class='tooltiptext'>%v</span></div>", field.Name)
 		},
 	}
@@ -75,7 +75,7 @@ var (
 // in which is responsible to mark and export a string to its html visualization
 type HTMLExporter struct {
 	htmlTemplate    string
-	htmlMarker      configuration.Marker
+	htmlMarker      yamlconfig.Marker
 	defaultFileName string
 }
 
@@ -85,8 +85,8 @@ func GetHTMLExporter() Exporter {
 }
 
 // MarkFieldsOnString will mark all the fields on a given string using a custom html marker
-func (exporter HTMLExporter) MarkFieldsOnString(fields []configuration.Field, s string) string {
-	return configuration.ApplyMarkerToFieldsOnString(exporter.htmlMarker, fields, s)
+func (exporter HTMLExporter) MarkFieldsOnString(fields []yamlconfig.Field, s string) string {
+	return yamlconfig.ApplyMarkerToFieldsOnString(exporter.htmlMarker, fields, s)
 }
 
 // ExportVisualization will take a given string and will use it on a HTML template to make it better to visualize the end result on a browser

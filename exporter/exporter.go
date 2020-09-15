@@ -1,11 +1,11 @@
 package exporter
 
-import "github.com/pedroppinheiro/fwf/configuration"
+import "github.com/pedroppinheiro/fwf/yamlconfig"
 
 //Exporter defines the interface for all exporters
 type Exporter interface {
 	// MarkFieldsOnString will mark all the fields on a given string
-	MarkFieldsOnString([]configuration.Field, string) string
+	MarkFieldsOnString([]yamlconfig.Field, string) string
 
 	// ExportVisualization will take a given string and may add specific content to aid in the visualizing of the end result
 	ExportVisualization(string) string
