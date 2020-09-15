@@ -2,20 +2,10 @@ package exporter
 
 import (
 	"testing"
-
-	"github.com/pedroppinheiro/fwf/yamlconfig"
 )
 
 var exporter = HTMLExporter{
 	htmlTemplate: "<template>{{.}}</template>",
-	htmlMarker: yamlconfig.Marker{
-		ObtainInitialMarker: func(field yamlconfig.Field) string {
-			return "<!--"
-		},
-		ObtainEndMarker: func(field yamlconfig.Field) string {
-			return "-->"
-		},
-	},
 }
 
 func TestHTMLExporter_ExportVisualization(t *testing.T) {

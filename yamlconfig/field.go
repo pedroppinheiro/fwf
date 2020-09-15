@@ -13,15 +13,11 @@ type Field struct {
 	End     int
 }
 
-// Marker holds the initial and end marker that are placed before and after a field on a string
-type Marker struct {
-	//ObtainInitialMarker returns a string corresponding to the initial marker.
-	// A given field may be used to get more information
-	ObtainInitialMarker func(field Field) string
+// Marker needs to be implemented in order to get the initial and end marker. These markers are placed before and after a string (field)
+type Marker interface {
+	ObtainInitialMarker(field Field) string
 
-	//ObtainEndMarker returns a string corresponding to the end marker.
-	// A given field may be used to get more information
-	ObtainEndMarker func(field Field) string
+	ObtainEndMarker(field Field) string
 }
 
 // isValid returns true if the field is valid, false otherwise. A valid field is one where
@@ -129,8 +125,8 @@ func getStringAfterField(s string, field Field) string {
 	return s[field.End:]
 }
 
-// ApplyMarkerToFieldsOnString returns a string that is the result of applying a marker to the fields on a string
-// For instance, given the string "thequickbrownfox", a field with initial 4 and end 8, and a Marker{"<", ">"}
+// ApplyMarkerToFieldsOnString returns a string that is the result of applying a field marker to the fields on a string
+// For instance, given a marker "<" and ">", and given the string "thequickbrownfox" with a field with initial 4 and end 8,
 // the resulting string will be "the<quick>brownfox"
 func ApplyMarkerToFieldsOnString(marker Marker, fields []Field, s string) string {
 	sortFieldsByInitialPositionAsc(fields)

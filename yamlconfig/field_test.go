@@ -451,17 +451,18 @@ func Test_getStringAfterField(t *testing.T) {
 	}
 }
 
+type marker struct{}
+
+func (m marker) ObtainInitialMarker(field Field) string {
+	return "<"
+}
+func (m marker) ObtainEndMarker(field Field) string {
+	return ">"
+}
+
 func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 
-	marker := Marker{
-		ObtainInitialMarker: func(field Field) string {
-			return "<"
-		},
-		ObtainEndMarker: func(field Field) string {
-			return ">"
-		},
-	}
-
+	customMarker := marker{}
 	type args struct {
 		marker Marker
 		fields []Field
@@ -475,7 +476,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 		{
 			name: "Should mark the string correctly with the fields",
 			args: args{
-				marker: marker,
+				marker: customMarker,
 				fields: []Field{
 					{"", 4, 8},
 					{"", 17, 21},
@@ -487,7 +488,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 		{
 			name: "Should mark the string correctly with the fields",
 			args: args{
-				marker: marker,
+				marker: customMarker,
 				fields: []Field{
 					{"", 9, 13},
 					{"", 4, 8},
@@ -501,7 +502,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 		{
 			name: "Should mark the string correctly with the fields",
 			args: args{
-				marker: marker,
+				marker: customMarker,
 				fields: []Field{
 					{"", 1, 35},
 				},
@@ -512,7 +513,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 		{
 			name: "Should mark the string correctly with the fields",
 			args: args{
-				marker: marker,
+				marker: customMarker,
 				fields: []Field{
 					{"", 1, 1},
 					{"", 35, 35},
@@ -524,7 +525,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 		{
 			name: "Should mark the string correctly with the fields",
 			args: args{
-				marker: marker,
+				marker: customMarker,
 				fields: []Field{
 					{"", 34, 100},
 				},

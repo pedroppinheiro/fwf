@@ -60,33 +60,30 @@ var (
 			<body><pre>{{.}}</pre>
 			</body>
 		</html>`
-
-	htmlMarker = yamlconfig.Marker{
-		ObtainInitialMarker: func(field yamlconfig.Field) string {
-			return "<div class='tooltip'>"
-		},
-		ObtainEndMarker: func(field yamlconfig.Field) string {
-			return fmt.Sprintf("<span class='tooltiptext'>%v</span></div>", field.Name)
-		},
-	}
 )
 
 // HTMLExporter is an implementation of the Exporter interface,
 // in which is responsible to mark and export a string to its html visualization
 type HTMLExporter struct {
 	htmlTemplate    string
-	htmlMarker      yamlconfig.Marker
 	defaultFileName string
 }
 
 // GetHTMLExporter returns the initialized HTMLExporter with its custom template and marker
-func GetHTMLExporter() Exporter {
-	return HTMLExporter{htmlTemplate, htmlMarker, "index.html"}
+func GetHTMLExporter() HTMLExporter {
+	return HTMLExporter{htmlTemplate, "index.html"}
 }
 
-// GetFieldMarker return html field marker
-func (exporter HTMLExporter) GetFieldMarker() yamlconfig.Marker {
-	return exporter.htmlMarker
+//ObtainInitialMarker returns a string corresponding to the initial field marker.
+// A given field may be used to get more information
+func (exporter HTMLExporter) ObtainInitialMarker(field yamlconfig.Field) string {
+	return "<div class='tooltip'>"
+}
+
+//ObtainEndMarker returns a string corresponding to the end field marker.
+// A given field may be used to get more information
+func (exporter HTMLExporter) ObtainEndMarker(field yamlconfig.Field) string {
+	return fmt.Sprintf("<span class='tooltiptext'>%v</span></div>", field.Name)
 }
 
 // ExportVisualization will take a given string and will use it on a HTML template to make it better to visualize the end result on a browser
