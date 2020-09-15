@@ -38,14 +38,14 @@ func main() {
 	defer file.Close()
 	reader := bufio.NewReader(file)
 
-	exporter := getCurrentExporter()
+	fileExporter := getCurrentExporter()
 	exportedContent := ""
 	for {
 		line, err := reader.ReadString('\n')
 
 		for _, record := range configuration.Records {
 			if record.IsMatch(line) {
-				exportedContent += yamlconfig.ApplyMarkerToFieldsOnString(exporter, record.Fields, line)
+				exportedContent += yamlconfig.ApplyMarkerToFieldsOnString(fileExporter, record.Fields, line)
 			} else {
 				exportedContent += line
 			}
@@ -55,8 +55,8 @@ func main() {
 			break
 		}
 	}
-	finalExportedContent := exporter.ExportVisualization(exportedContent)
-	generatedFilePath, err := exporter.SaveToFile(finalExportedContent, fileExportedLocation)
+	finalExportedContent := fileExporter.ExportVisualization(exportedContent)
+	generatedFilePath, err := fileExporter.SaveToFile(finalExportedContent, fileExportedLocation)
 
 	if err == nil {
 		log.Printf("File created successfully on %v\n", generatedFilePath)
