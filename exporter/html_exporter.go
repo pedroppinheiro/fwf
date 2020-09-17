@@ -14,49 +14,52 @@ var (
 	htmlTemplate = `
 		<!DOCTYPE html>
 		<html>
-			<style>
-				.tooltip {
-					position: relative;
-					display: inline-block;
-					/*border: 2px dotted black*/
-					box-shadow: 0 0 5px rgb(0,100,0,1);
-				}
+			<head>
+				<style>
+					.tooltip {
+						position: relative;
+						display: inline-block;
+						/*border: 2px dotted black*/
+						box-shadow: 0 0 5px rgb(0,100,0,1);
+					}
 
-				.tooltip .tooltiptext {
-					visibility: hidden;
-					background-color: #555;
-					color: #fff;
-					text-align: center;
-					border-radius: 6px;
-					position: fixed;
-					z-index: 1;
-					bottom: 0;
-					left: 0;
-					right: 0;
-					opacity: 0;
-					transition: opacity 0.3s;    
-					font-size: 1.5em;
-				}
-				
-				.tooltip:hover {
-					box-shadow: 0 0 5px rgb(100,0,0,1);
-					/*box-shadow: 0 0 5px rgba(0,0,0,0.5);*/
-				}
+					.tooltip .tooltiptext {
+						visibility: hidden;
+						background-color: #555;
+						color: #fff;
+						text-align: center;
+						border-radius: 6px;
+						position: fixed;
+						z-index: 1;
+						bottom: 0;
+						left: 0;
+						right: 0;
+						opacity: 0;
+						transition: opacity 0.3s;    
+						font-size: 1.5em;
+					}
+					
+					.tooltip:hover {
+						box-shadow: 0 0 5px rgb(100,0,0,1);
+						/*box-shadow: 0 0 5px rgba(0,0,0,0.5);*/
+					}
 
-				.tooltip:hover .tooltiptext {
-					visibility: visible;
-					opacity: 1;
-				}
+					.tooltip:hover .tooltiptext {
+						visibility: visible;
+						opacity: 1;
+						white-space: break-spaces;
+					}
 
-				pre {
-					font-family: 'Courier New', Courier, monospace;
-					height: 100%;
-					padding: 4px;
-					counter-reset: line;
-					overflow-x: hidden;
-					overflow-y: hidden;
-				}
-			</style>
+					pre {
+						font-family: 'Courier New', Courier, monospace;
+						height: 100%;
+						padding: 4px;
+						counter-reset: line;
+						overflow-x: hidden;
+						overflow-y: hidden;
+					}
+				</style>
+			</head>
 			<body><pre>{{.}}</pre>
 			</body>
 		</html>`
