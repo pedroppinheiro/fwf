@@ -55,8 +55,6 @@ var (
 						height: 100%;
 						padding: 4px;
 						counter-reset: line;
-						overflow-x: hidden;
-						overflow-y: hidden;
 					}
 				</style>
 			</head>
