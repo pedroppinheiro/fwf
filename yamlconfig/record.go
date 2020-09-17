@@ -40,3 +40,16 @@ func (regex *Regex) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	*regex = Regex{matchedString, compiledRegex}
 	return nil
 }
+
+// FindFirstRecordThatMatches returns the first record, in a given slice of records, in which its
+// regex matches the given line. If a record is found it returs the found record and true.
+// if it does not find it returns an empty Record and false
+func FindFirstRecordThatMatches(records []Record, line string) (Record, bool) {
+	for _, record := range records {
+		if record.IsMatch(line) {
+			return record, true
+		}
+	}
+
+	return Record{}, false
+}

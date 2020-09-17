@@ -1,6 +1,7 @@
 package yamlconfig
 
 import (
+	"reflect"
 	"regexp"
 	"testing"
 )
@@ -67,6 +68,106 @@ func TestRecords_IsMatch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.records.IsMatch(tt.args.s); got != tt.want {
 				t.Errorf("Records.IsMatch() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_FindFirstRecordThatMatches(t *testing.T) {
+
+	var differentRecords = []Record{
+		{
+			Name:  "record A",
+			Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
+			Fields: []Field{
+				{
+					Name:    "field 1",
+					Initial: 1,
+					End:     2,
+				},
+			},
+		},
+		{
+			Name:  "record B",
+			Regex: Regex{"^B.*$", regexp.MustCompile("^B.*$")},
+			Fields: []Field{
+				{
+					Name:    "field 2",
+					Initial: 1,
+					End:     2,
+				},
+			},
+		},
+	}
+
+	var recordsWithSameRegex = []Record{
+		{
+			Name:  "record A",
+			Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
+			Fields: []Field{
+				{
+					Name:    "field 1",
+					Initial: 1,
+					End:     2,
+				},
+			},
+		},
+		{
+			Name:  "record B",
+			Regex: Regex{"^A.*$", regexp.MustCompile("^A.*$")},
+			Fields: []Field{
+				{
+					Name:    "field 2",
+					Initial: 1,
+					End:     2,
+				},
+			},
+		},
+	}
+
+	type args struct {
+		records []Record
+		line    string
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  Record
+		want1 bool
+	}{
+		{
+			name:  "Find first record correctly",
+			args:  args{differentRecords, "Athequickbrownfoxjumpsoverthelazydog"},
+			want:  differentRecords[0],
+			want1: true,
+		},
+		{
+			name:  "Find first record correctly even if it's the last in the array",
+			args:  args{differentRecords, "Bthequickbrownfoxjumpsoverthelazydog"},
+			want:  differentRecords[1],
+			want1: true,
+		},
+		{
+			name:  "Find first record correctly even if all records match line",
+			args:  args{recordsWithSameRegex, "Athequickbrownfoxjumpsoverthelazydog"},
+			want:  recordsWithSameRegex[0],
+			want1: true,
+		},
+		{
+			name:  "Do not find any records",
+			args:  args{differentRecords, "Xthequickbrownfoxjumpsoverthelazydog"},
+			want:  Record{},
+			want1: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := FindFirstRecordThatMatches(tt.args.records, tt.args.line)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FindFirstRecordThatMatches() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("FindFirstRecordThatMatches() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}
