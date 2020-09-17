@@ -99,7 +99,6 @@ func (exporter HTMLExporter) ExportVisualization(s string) string {
 		log.Fatal(err)
 	}
 
-	fmt.Println(buf.String())
 	return buf.String()
 }
 
