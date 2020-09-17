@@ -2,7 +2,6 @@ package yamlconfig
 
 import (
 	"fmt"
-	"log"
 	"sort"
 )
 
@@ -80,6 +79,10 @@ func getStringBeforeField(s string, field Field) string {
 		return ""
 	}
 
+	if field.Initial > len(s) {
+		return s
+	}
+
 	runes := []rune(s)
 	return string(runes[0 : field.Initial-1])
 }
@@ -96,9 +99,13 @@ func getStringOfField(s string, field Field) string {
 		return ""
 	}
 
+	if field.Initial > len(s) {
+		return ""
+	}
+
 	var end int
+	// end is bigger than the string
 	if field.End > len(s) {
-		log.Printf("Warning getStringOfField() - Field \"%v\" with end %v is higher then the length of the given string \"%v\"", field.Name, field.End, s)
 		end = len(s)
 	} else {
 		end = field.End
@@ -116,8 +123,8 @@ func getStringAfterField(s string, field Field) string {
 		panic("Error - the given field is invalid")
 	}
 
+	// end is bigger than the string
 	if field.End > len(s) {
-		log.Printf("Warning getStringAfterField() - Field \"%v\" with end %v is higher then the length of the given string \"%v\"", field.Name, field.End, s)
 		return ""
 	}
 
@@ -143,9 +150,13 @@ func ApplyMarkerToFieldsOnString(marker Marker, fields []Field, s string) string
 
 	for i, field := range fields {
 		tempString = getStringBeforeField(s, field)
-		tempString += marker.ObtainInitialMarker(field)
-		tempString += getStringOfField(s, field)
-		tempString += marker.ObtainEndMarker(field)
+
+		stringOfField := getStringOfField(s, field)
+		if stringOfField != "" {
+			tempString += marker.ObtainInitialMarker(field)
+			tempString += stringOfField
+			tempString += marker.ObtainEndMarker(field)
+		}
 
 		if i != 0 {
 			lastFieldEndPosition = fields[i-1].End

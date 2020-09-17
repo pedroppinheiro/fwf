@@ -57,7 +57,7 @@ func TestField_isValid(t *testing.T) {
 			want:  false,
 		},
 		{
-			name:  "Field should be invalid because initial is higher then end",
+			name:  "Field should be invalid because initial is bigger than end",
 			field: Field{Initial: 3, End: 2},
 			want:  false,
 		},
@@ -288,6 +288,16 @@ func Test_getStringBeforeField(t *testing.T) {
 		},
 		{
 			name: "Should get the string before the field",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 1, 1}},
+			want: "",
+		},
+		{
+			name: "Should get the string before the field",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 1, 2}},
+			want: "",
+		},
+		{
+			name: "Should get the string before the field",
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 2}},
 			want: "t",
 		},
@@ -297,14 +307,34 @@ func Test_getStringBeforeField(t *testing.T) {
 			want: "the",
 		},
 		{
-			name: "Should get the string before the field",
+			name: "Should get the string before the field with end bigger than string length",
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 4, 100}},
 			want: "the",
+		},
+		{
+			name: "Should get the string before the field with initial bigger than string length",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 100, 200}},
+			want: "thequickbrownfoxjumpsoverthelazydog",
 		},
 		{
 			name: "Should correctly get the string with accents before the field",
 			args: args{s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 5}},
 			want: "Ç",
+		},
+		{
+			name: "Should correctly get the string before the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 34, 35}},
+			want: "thequickbrownfoxjumpsoverthelazyd",
+		},
+		{
+			name: "Should correctly get the string before the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 35, 35}},
+			want: "thequickbrownfoxjumpsoverthelazydo",
+		},
+		{
+			name: "Should correctly get the string before the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 35, 36}},
+			want: "thequickbrownfoxjumpsoverthelazydo",
 		},
 	}
 	for _, tt := range tests {
@@ -354,6 +384,11 @@ func Test_getStringOfField(t *testing.T) {
 		},
 		{
 			name: "Should get the string of the field",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 1, 2}},
+			want: "th",
+		},
+		{
+			name: "Should get the string of the field",
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 2}},
 			want: "h",
 		},
@@ -363,9 +398,14 @@ func Test_getStringOfField(t *testing.T) {
 			want: "quick",
 		},
 		{
-			name: "Should get the string of the field",
+			name: "Should get the string of the field with end bigger than string length",
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 4, 100}},
 			want: "quickbrownfoxjumpsoverthelazydog",
+		},
+		{
+			name: "Should get the string of the field with initial bigger than string length",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 100, 200}},
+			want: "",
 		},
 		{
 			name: "Should get the string of the field",
@@ -376,6 +416,21 @@ func Test_getStringOfField(t *testing.T) {
 			name: "Should correctly get the string with accents of field",
 			args: args{s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 5}},
 			want: "ÇÇÇÇ",
+		},
+		{
+			name: "Should correctly get the string of the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 34, 35}},
+			want: "og",
+		},
+		{
+			name: "Should correctly get the string of the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 35, 35}},
+			want: "g",
+		},
+		{
+			name: "Should correctly get the string of the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 35, 36}},
+			want: "g",
 		},
 	}
 	for _, tt := range tests {
@@ -438,14 +493,34 @@ func Test_getStringAfterField(t *testing.T) {
 			want: "brownfoxjumpsoverthelazydog",
 		},
 		{
-			name: "Should get the string after the field",
+			name: "Should get the string after the field with end bigger than string length",
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 4, 100}},
+			want: "",
+		},
+		{
+			name: "Should get the string of the field with initial bigger than string length",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 100, 200}},
 			want: "",
 		},
 		{
 			name: "Should correctly get the string with accents after field",
 			args: args{s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 5}},
 			want: "uickbrownfoxjumpsoverthelazydog",
+		},
+		{
+			name: "Should correctly get the string after field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 34, 35}},
+			want: "",
+		},
+		{
+			name: "Should correctly get the string of the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 35, 35}},
+			want: "",
+		},
+		{
+			name: "Should correctly get the string of the field - testing edge cases",
+			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 35, 36}},
+			want: "",
 		},
 	}
 	for _, tt := range tests {
@@ -538,7 +613,7 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 			want: "<t>hequickbrownfoxjumpsoverthelazydo<g>",
 		},
 		{
-			name: "Should mark the string correctly with the fields",
+			name: "Should mark the string correctly with the field's end bigger than string",
 			args: args{
 				marker: customMarker,
 				fields: []Field{
@@ -558,6 +633,17 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 				s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog",
 			},
 			want: "Ç<ÇÇÇÇ>uickbrownfoxjumpsoverthelazydog",
+		},
+		{
+			name: "Should return original string if the field's initial is bigger than string",
+			args: args{
+				marker: customMarker,
+				fields: []Field{
+					{"", 100, 200},
+				},
+				s: "thequickbrownfoxjumpsoverthelazydog",
+			},
+			want: "thequickbrownfoxjumpsoverthelazydog",
 		},
 	}
 	for _, tt := range tests {
