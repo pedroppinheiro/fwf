@@ -79,7 +79,9 @@ func getStringBeforeField(s string, field Field) string {
 	if s == "" || field.Initial == 1 {
 		return ""
 	}
-	return s[0 : field.Initial-1]
+
+	runes := []rune(s)
+	return string(runes[0 : field.Initial-1])
 }
 
 // getStringBeforeField returns the string of a given field.
@@ -102,7 +104,8 @@ func getStringOfField(s string, field Field) string {
 		end = field.End
 	}
 
-	return s[field.Initial-1 : end]
+	runes := []rune(s)
+	return string(runes[field.Initial-1 : end])
 }
 
 // getStringBeforeField returns the string after a given field.
@@ -122,7 +125,8 @@ func getStringAfterField(s string, field Field) string {
 		return ""
 	}
 
-	return s[field.End:]
+	runes := []rune(s)
+	return string(runes[field.End:])
 }
 
 // ApplyMarkerToFieldsOnString returns a string that is the result of applying a field marker to the fields on a string

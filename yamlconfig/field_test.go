@@ -301,6 +301,11 @@ func Test_getStringBeforeField(t *testing.T) {
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 4, 100}},
 			want: "the",
 		},
+		{
+			name: "Should correctly get the string with accents before the field",
+			args: args{s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 5}},
+			want: "Ç",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -367,6 +372,11 @@ func Test_getStringOfField(t *testing.T) {
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 1, 35}},
 			want: "thequickbrownfoxjumpsoverthelazydog",
 		},
+		{
+			name: "Should correctly get the string with accents of field",
+			args: args{s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 5}},
+			want: "ÇÇÇÇ",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -431,6 +441,11 @@ func Test_getStringAfterField(t *testing.T) {
 			name: "Should get the string after the field",
 			args: args{s: "thequickbrownfoxjumpsoverthelazydog", field: Field{"", 4, 100}},
 			want: "",
+		},
+		{
+			name: "Should correctly get the string with accents after field",
+			args: args{s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog", field: Field{"", 2, 5}},
+			want: "uickbrownfoxjumpsoverthelazydog",
 		},
 	}
 	for _, tt := range tests {
@@ -532,6 +547,17 @@ func Test_ApplyMarkerToFieldsOnString(t *testing.T) {
 				s: "thequickbrownfoxjumpsoverthelazydog",
 			},
 			want: "thequickbrownfoxjumpsoverthelazyd<og>",
+		},
+		{
+			name: "Should mark the string correctly with accents",
+			args: args{
+				marker: customMarker,
+				fields: []Field{
+					{"", 2, 5},
+				},
+				s: "ÇÇÇÇÇuickbrownfoxjumpsoverthelazydog",
+			},
+			want: "Ç<ÇÇÇÇ>uickbrownfoxjumpsoverthelazydog",
 		},
 	}
 	for _, tt := range tests {
