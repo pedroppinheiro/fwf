@@ -9,7 +9,7 @@ fwf is a little command line tool to make it easier to work with fixed-width fil
 ## Usage
 
 ```
-Usage fwf:
+Usage of fwf:
   -file string
         the full path for the file to generate the visualization
   -yaml string
@@ -30,7 +30,7 @@ It has field "name" with size 19 (position 1 to 19), and a field "age" with size
 
 ```
 records:
-  - name: "People"
+  - name: "Person"
     regex: .*
     fields:
       - name: "Person Name"
@@ -47,7 +47,7 @@ All we have to to now is feed these files to our fwf command line with the follo
 ./fwf -yaml="configuration.yaml" -file="people.txt"
 ```
 
-The fwf tool will generate an index.html file which highlights fields. If you hover your mouse over the fields a tooltip will show up with the name of the fields.
+The fwf tool will generate an index.html file which highlights fields. If you hover your mouse over the fields a tooltip will show up with the name of the field.
 
 ## Building
 
