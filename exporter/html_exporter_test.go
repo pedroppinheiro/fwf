@@ -75,16 +75,22 @@ func TestHTMLExporter_MarkRecordsOnString(t *testing.T) {
 		want     string
 	}{
 		{
-			"Should correctly mark the records",
+			"Should correctly mark the fields of the first record",
 			GetHTMLExporter(),
 			args{differentRecords, "Athequickbrownfoxjumpsoverthelazydog"},
 			"<span><div class='tooltip'>A<span class='tooltiptext'>field 1</span></div>thequickbrownfoxjumpsoverthelazydog</span>",
 		},
 		{
-			"Should correctly mark the records",
+			"Should correctly mark the fields of the second record",
 			GetHTMLExporter(),
 			args{differentRecords, "Bthequickbrownfoxjumpsoverthelazydog"},
 			"<span><div class='tooltip'>B<span class='tooltiptext'></span></div>thequickbrownfoxjumpsoverthelazydog</span>",
+		},
+		{
+			"Should not mark due to not match any record",
+			GetHTMLExporter(),
+			args{differentRecords, "Cthequickbrownfoxjumpsoverthelazydog"},
+			"<span>Cthequickbrownfoxjumpsoverthelazydog</span>",
 		},
 	}
 	for _, tt := range tests {

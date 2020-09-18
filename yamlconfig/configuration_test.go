@@ -79,7 +79,7 @@ func Test_ReadConfiguration(t *testing.T) {
          - nameIsChanged: "record A"
            fieldsIsChanged:
             - nameIsChanged: "field 1"
-			- nameIsChanged: "field 2"`
+            - nameIsChanged: "field 2"`
 
 	//Test 4 - unparsable regex
 	var yamlString4 string = `
@@ -89,6 +89,19 @@ func Test_ReadConfiguration(t *testing.T) {
            fields:
             - name: "field 1"
             - name: "field 2"`
+
+	//Test 5 - fields with conflicts
+	var yamlString5 string = `
+        records:
+         - name: "record A"
+           regex: ""
+           fields:
+            - name: "field 1"
+              initial: 1
+              end: 2
+            - name: "field 2"
+              initial: 2
+              end: 3`
 
 	type args struct {
 		yamlConfiguration []byte
@@ -106,7 +119,7 @@ func Test_ReadConfiguration(t *testing.T) {
 			false,
 		},
 		{
-			"construct yaml with only some of the configuration's fields",
+			"panics due to invalid fields",
 			args{yamlConfiguration: []byte(yamlString2)},
 			Configuration{},
 			true,
@@ -132,6 +145,12 @@ func Test_ReadConfiguration(t *testing.T) {
 		{
 			"get error due to yaml having an unparsable regex",
 			args{yamlConfiguration: []byte(yamlString4)},
+			Configuration{},
+			true,
+		},
+		{
+			"get error due to fields having a conflict",
+			args{yamlConfiguration: []byte(yamlString5)},
 			Configuration{},
 			true,
 		},
