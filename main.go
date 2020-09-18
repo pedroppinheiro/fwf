@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
+	"runtime"
 
 	"github.com/pedroppinheiro/fwf/exporter"
 	"github.com/pedroppinheiro/fwf/yamlconfig"
@@ -54,6 +56,7 @@ func main() {
 
 	if err == nil {
 		log.Printf("File created successfully on %v\n", generatedFilePath)
+		OpenInBrowser(generatedFilePath)
 	} else {
 		panic(err)
 	}
@@ -86,4 +89,22 @@ func getFile(fileLocation string) *os.File {
 
 func getCurrentExporter() exporter.Exporter {
 	return exporter.GetHTMLExporter()
+}
+
+// OpenInBrowser opens the file in the given path in the browser. https://stackoverflow.com/a/35921541/1252947
+func OpenInBrowser(path string) {
+	var args []string
+	switch runtime.GOOS {
+	case "darwin":
+		args = []string{"open", path}
+	case "windows":
+		args = []string{"cmd", "/c", "start", path}
+	default:
+		args = []string{"xdg-open", path}
+	}
+	cmd := exec.Command(args[0], args[1:]...)
+	err := cmd.Run()
+	if err != nil {
+		log.Printf("OpenInBrowser: %v\n", err)
+	}
 }
