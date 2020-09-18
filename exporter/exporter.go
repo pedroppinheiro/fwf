@@ -12,5 +12,7 @@ type Exporter interface {
 	// SaveToFile saves a given string to a given path
 	SaveToFile(s string, path string) (generatedFilePath string, err error)
 
+	MarkRecordsOnString(records []yamlconfig.Record, s string) string
+
 	yamlconfig.Marker
 }

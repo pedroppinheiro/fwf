@@ -53,8 +53,23 @@ var (
 					pre {
 						font-family: 'Courier New', Courier, monospace;
 						height: 100%;
-						padding: 4px;
+						/*padding: 4px;*/
 						counter-reset: line;
+					}
+					pre > span {
+						display: block;
+						line-height: 1.5rem;
+					}
+
+					pre > span:before {
+						counter-increment: line;
+						content: counter(line);
+						display: inline-block;
+						border-right: 1px solid #ddd;
+						/*padding: 0 .5em;*/
+						margin-right: .5em;
+						color: #888;
+						width: 40px;
 					}
 				</style>
 			</head>
@@ -85,6 +100,26 @@ func (exporter HTMLExporter) ObtainInitialMarker(field yamlconfig.Field) string 
 // A given field may be used to get more information
 func (exporter HTMLExporter) ObtainEndMarker(field yamlconfig.Field) string {
 	return fmt.Sprintf("<span class='tooltiptext'>%v</span></div>", field.Name)
+}
+
+// MarkRecordsOnString goes through all the given records and marks a given string based on the records's fields.
+// It returns the marked string
+func (exporter HTMLExporter) MarkRecordsOnString(records []yamlconfig.Record, s string) string {
+	var markedString string
+	record, isRecordFound := yamlconfig.FindFirstRecordThatMatchesString(records, s)
+
+	if isRecordFound {
+		markedString += "<span>"
+		markedString += yamlconfig.ApplyMarkerToFieldsOnString(exporter, record.Fields, s)
+		markedString += "</span>"
+	} else {
+		markedString += "<span>"
+		markedString += ""
+		markedString += s
+		markedString += "</span>"
+	}
+
+	return markedString
 }
 
 // ExportVisualization will take a given string and will use it on a HTML template to make it better to visualize the end result on a browser

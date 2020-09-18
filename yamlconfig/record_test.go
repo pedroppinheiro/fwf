@@ -73,7 +73,7 @@ func TestRecords_IsMatch(t *testing.T) {
 	}
 }
 
-func Test_FindFirstRecordThatMatches(t *testing.T) {
+func Test_FindFirstRecordThatMatchesString(t *testing.T) {
 
 	var differentRecords = []Record{
 		{
@@ -162,12 +162,97 @@ func Test_FindFirstRecordThatMatches(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := FindFirstRecordThatMatches(tt.args.records, tt.args.line)
+			got, got1 := FindFirstRecordThatMatchesString(tt.args.records, tt.args.line)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("FindFirstRecordThatMatches() got = %v, want %v", got, tt.want)
+				t.Errorf("FindFirstRecordThatMatchesString() got = %v, want %v", got, tt.want)
 			}
 			if got1 != tt.want1 {
-				t.Errorf("FindFirstRecordThatMatches() got1 = %v, want %v", got1, tt.want1)
+				t.Errorf("FindFirstRecordThatMatchesString() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestMustCreateRegex(t *testing.T) {
+
+	compiledRegex := regexp.MustCompile("test")
+
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name        string
+		args        args
+		wantRegex   Regex
+		expectPanic bool
+	}{
+		{
+			"Must create regex",
+			args{"test"},
+			Regex{"test", compiledRegex},
+			false,
+		},
+		{
+			"Must panic due to invalid regex",
+			args{"\\"},
+			Regex{},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			if tt.expectPanic {
+				defer func() {
+					if r := recover(); r == nil {
+						t.Error("Error - was expecting function to panic")
+						return
+					}
+				}()
+			}
+
+			if gotRegex := MustCreateRegex(tt.args.s); !reflect.DeepEqual(gotRegex, tt.wantRegex) {
+				t.Errorf("MustCreateRegex() = %v, want %v", gotRegex, tt.wantRegex)
+			}
+		})
+	}
+}
+
+func TestCreateRegex(t *testing.T) {
+
+	compiledRegex := regexp.MustCompile("test")
+
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    Regex
+		wantErr bool
+	}{
+		{
+			"Create regex successfully",
+			args{"test"},
+			Regex{"test", compiledRegex},
+			false,
+		},
+		{
+			"Creates empty regex when given an invalid regex",
+			args{"\\"},
+			Regex{},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := CreateRegex(tt.args.s)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CreateRegex() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CreateRegex() = %v, want %v", got, tt.want)
 			}
 		})
 	}

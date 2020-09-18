@@ -27,24 +27,39 @@ type Regex struct {
 // See https://godoc.org/gopkg.in/yaml.v2#Unmarshaler for more details
 func (regex *Regex) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var matchedString string
-	if err := unmarshal(&matchedString); err != nil {
+	var err error
+	if err = unmarshal(&matchedString); err != nil {
 		return err
 	}
 
-	compiledRegex, err := regexp.Compile(matchedString)
-	if err != nil {
-		*regex = Regex{}
-		return err
-	}
-
-	*regex = Regex{matchedString, compiledRegex}
-	return nil
+	*regex, err = CreateRegex(matchedString)
+	return err
 }
 
-// FindFirstRecordThatMatches returns the first record, in a given slice of records, in which its
+// MustCreateRegex creates a compiled regex based on a given string, but panics if anything goes wrong
+func MustCreateRegex(s string) (regex Regex) {
+	regex, err := CreateRegex(s)
+	if err != nil {
+		panic(err)
+	}
+
+	return regex
+}
+
+// CreateRegex creates a compiled regex based on a given string
+func CreateRegex(s string) (Regex, error) {
+	compiledRegex, err := regexp.Compile(s)
+	if err != nil {
+		return Regex{}, err
+	}
+
+	return Regex{s, compiledRegex}, nil
+}
+
+// FindFirstRecordThatMatchesString returns the first record, in a given slice of records, in which its
 // regex matches the given line. If a record is found it returs the found record and true.
 // if it does not find it returns an empty Record and false
-func FindFirstRecordThatMatches(records []Record, line string) (Record, bool) {
+func FindFirstRecordThatMatchesString(records []Record, line string) (Record, bool) {
 	for _, record := range records {
 		if record.IsMatch(line) {
 			return record, true

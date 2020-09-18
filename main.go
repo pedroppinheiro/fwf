@@ -43,12 +43,7 @@ func main() {
 	for {
 		line, err := reader.ReadString('\n')
 
-		record, isRecordFound := yamlconfig.FindFirstRecordThatMatches(configuration.Records, line)
-		if isRecordFound {
-			exportedContent += yamlconfig.ApplyMarkerToFieldsOnString(fileExporter, record.Fields, line)
-		} else {
-			exportedContent += line
-		}
+		exportedContent += fileExporter.MarkRecordsOnString(configuration.Records, line)
 
 		if err == io.EOF {
 			break
